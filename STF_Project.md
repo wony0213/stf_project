@@ -371,6 +371,157 @@ module.exports.handler = function(argv) {
 
 ### lib/db
 
+- #### 简介
+
+- #### 数据表
+
+users表
+
+```json
+{
+
+    "adbKeys": [
+        {
+            "fingerprint": "cc:13:2a:ae:31:89:14:5d:69:32:db:6d:da:d2:c1:b4" ,
+            "title": "wony_0213@wony-PC"
+        }
+    ] ,
+    "createdAt": Tue Apr 18 2017 07:35:30 GMT+00:00 ,
+    "email": gaolifa@caict.ac.cn, »
+    "forwards": [ ],
+    "group": "fYZFdT8PTBqE27gdCXMEYw==" ,
+    "ip": "::ffff:127.0.0.1" ,
+    "lastLoggedInAt": Thu Jun 15 2017 07:54:23 GMT+00:00 ,
+    "name": "test" ,
+    "settings": {
+        "deviceListActiveTabs": {
+            "details": false ,
+            "icons": true
+        } ,
+        "lastUsedDevice": "0815f81a7ab83004" ,
+        "platform": "web"
+    }
+
+}
+```
+
+accessTokens表
+
+```json
+rethinkdb数据库中暂无数据
+```
+
+vncauth表
+
+```json
+rethinkdb数据库中暂无数据
+```
+
+devices表
+
+```json
+{
+
+    "abi": "arm64-v8a" ,
+    "airplaneMode": false ,
+    "battery": {
+        "health": "good" ,
+        "level": 100 ,
+        "scale": 100 ,
+        "source": "usb" ,
+        "status": "full" ,
+        "temp": 33.9 ,
+        "voltage": 4.328
+    } ,
+    "browser": {
+        "apps": [
+            {
+                "id": "com.sec.android.app.sbrowser/.SBrowserLauncherActivity" ,
+                "name": "Browser" ,
+                "selected": false ,
+                "system": true ,
+                "type": "samsung-sbrowser"
+            }
+        ] ,
+        "selected": false
+    } ,
+    "channel": "KYM7aigduTE5q6GqnQbQh3hUruU=" ,
+    "createdAt": Tue Apr 18 2017 07:40:51 GMT+00:00 ,
+    "display": {
+        "density": 3.5 ,
+        "fps": 59 ,
+        "height": 2560 ,
+        "id": 0 ,
+        "rotation": 0 ,
+        "secure": true ,
+        "size": 5.659716606140137 ,
+        "url": "ws://localhost:7404" ,
+        "width": 1440 ,
+        "xdpi": 515.1539916992188 ,
+        "ydpi": 520.1920166015625
+    } ,
+    "manufacturer": "SAMSUNG" ,
+    "model": "SM-N9200" ,
+    "network": {
+        "connected": false ,
+        "failover": false ,
+        "roaming": false ,
+        "subtype": null ,
+        "type": null
+    } ,
+    "operator": "," ,
+    "owner": {
+        "email": gaolifa@caict.ac.cn, »
+        "group": "fYZFdT8PTBqE27gdCXMEYw==" ,
+        "name": "test"
+    } ,
+    "phone": {
+        "iccid": null ,
+        "imei": "352575072139889" ,
+        "network": "UNKNOWN" ,
+        "phoneNumber": null
+    } ,
+    "platform": "Android" ,
+    "presenceChangedAt": Thu Jun 15 2017 07:55:10 GMT+00:00 ,
+    "present": true ,
+    "product": "nobleltezc" ,
+    "provider": {
+        "channel": "H1PQ2iayRgyW8qzg2MUf9w==" ,
+        "name": "wony-PC"
+    } ,
+    "ready": true ,
+    "remoteConnect": true ,
+    "remoteConnectUrl": "localhost:7405" ,
+    "reverseForwards": [ ],
+    "sdk": "23" ,
+    "serial": "0815f81a7ab83004" ,
+    "status": 3 ,
+    "statusChangedAt": Thu Jun 15 2017 07:55:10 GMT+00:00 ,
+    "version": "6.0.1"
+
+}
+```
+
+logs表
+
+```json
+rethinkdb数据库中暂无数据
+```
+
+
+
+- #### api.js
+
+- #### index.js
+
+- #### setup.js
+
+- #### tables.js
+
+- #### 
+
+
+
 …
 
 ### lib/units
