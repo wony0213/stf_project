@@ -373,9 +373,17 @@ module.exports.handler = function(argv) {
 
 - #### 简介
 
-- #### 数据表
+/db文件夹下是数据库相关代码，该部分基于rethinkdb官方提供javascript driver实现，通过如下方式使用rethinkdb提供reQL接口。该部分基于Promise方式实现。
 
-users表
+```javascript
+var r = require('rethinkdb')
+```
+
+参考[rethinkdb](https://rethinkdb.com/docs/guide/javascript/)官方文档，熟悉ReQL语法。 
+
+- #### 数据表样例
+
+users表：
 
 ```json
 {
@@ -405,19 +413,19 @@ users表
 }
 ```
 
-accessTokens表
+accessTokens表：
 
 ```json
 rethinkdb数据库中暂无数据
 ```
 
-vncauth表
+vncauth表：
 
 ```json
 rethinkdb数据库中暂无数据
 ```
 
-devices表
+devices表：
 
 ```json
 {
@@ -502,7 +510,7 @@ devices表
 }
 ```
 
-logs表
+logs表：
 
 ```json
 rethinkdb数据库中暂无数据
@@ -510,19 +518,129 @@ rethinkdb数据库中暂无数据
 
 
 
-- #### api.js
+- #### table.js
 
-- #### index.js
+
+table.js中定义了各个表的primaryKey和建立的索引。
+
+参考rethinkdb官网[secondary indexes](https://rethinkdb.com/docs/secondary-indexes/javascript/)部分的介绍。
+
+users：
+
+```javascript
+primaryKey: 'email'
+indexes: adbKeys
+```
+
+accessTokens:
+
+```javascript
+primaryKey: 'id'
+indexes: email
+```
+
+vncauth:
+
+```javascript
+primaryKey: 'password'
+indexes: response, responsePerDevice
+```
+
+devices:
+
+```javascript
+primaryKey: 'serial'
+indexes: owner, present, providerChannel
+```
+
+logs:
+
+```javascript
+primaryKey: 'id'
+```
 
 - #### setup.js
 
-- #### tables.js
 
-- #### 
+setup.js中进行数据库的初始化设置，通过`module.exports = function(conn)`的形式导出数据库设置方法。通过Promise的形式执行创建数据库，创建数据表，创建索引的流程。
+
+首先调用`createDatabase()`,完成后根据`var tables = require('./tables')`的值调用`createTable()`方法，完成后调用`createIndex()`方法。参考[bluebird](http://bluebirdjs.com/docs/api-reference.html)的文档，注意resolve（）方法和return（）方法。
+
+`.return(any value) -> Promise`相当于`.then(function() {return value;});`
+
+```javascript
+module.exports = function(conn) {
+  var log = logger.createLogger('db:setup')
+
+  function alreadyExistsError(err) {
+    return err.msg && err.msg.indexOf('already exists') !== -1
+  }
+
+  function noMasterAvailableError(err) {
+    return err.msg && err.msg.indexOf('No master available') !== -1
+  }
+
+  function createDatabase() 
+
+  function createIndex(table, index, options) 
+
+  function createTable(table, options) 
+
+  return createDatabase()
+    .then(function() {
+      return Promise.all(Object.keys(tables).map(function(table) {
+        return createTable(table, tables[table])
+      }))
+    })
+    .return(conn)
+}
+```
 
 
 
-…
+- #### index.js
+
+
+/db模块的默认入口，提供了有关数据库操作的基础方法。
+
+<u>该部分用到了util目录下的srv和lifecycle，目前还未完全理解清晰。</u>
+
+```javascript
+var db = module.exports = Object.create(null)
+
+function connect() 
+
+// Export connection as a Promise
+db.connect = (function())()
+
+// Verifies that we can form a connection. Useful if it's necessary to make
+// sure that a handler doesn't run at all if the database is on a break. In
+// normal operation connections are formed lazily. In particular, this was
+// an issue with the processor unit, as it started processing messages before
+// it was actually truly able to save anything to the database. This lead to
+// lost messages in certain situations.
+db.ensureConnectivity = function(fn)
+
+// Close connection, we don't really care if it hasn't been created yet or not
+db.close = function()
+
+// Small utility for running queries without having to acquire a connection
+db.run = function(q, options)
+
+// Sets up the database
+db.setup = function() {
+  return db.connect().then(function(conn) {
+    return setup(conn)
+  })
+}
+```
+
+- #### api.js
+
+
+提供了操作数据库的接口，用于对数据库中各个数据表的GRUD操作。
+
+
 
 ### lib/units
 
