@@ -652,7 +652,97 @@ db.setup = function() {
 
 ### lib/util
 
-...
+#### lifecycle.js
+
+生命周期相关.
+
+![lifecycle](./images/lifecycle.png)
+
+
+
+#### zmqutil.js
+
+对`zmq`的封装，为了防止长时间空闲造成的TCP断开，对所有的zmq socket的TCP_KEEPALIVE的参数进行设置。
+
+通过`var zmqutil = require('../../util/zmqutil');var push = zmqutil.socket('push')`的方式调用。
+
+zeroMQ使用：
+
+- [zeromq官网](http://zeromq.org/community)
+
+
+- [zmq使用参考](https://www.npmjs.com/package/zmq)
+
+Push/Pull：
+
+```javascript
+// producer.js 
+var zmq = require('zmq')
+  , sock = zmq.socket('push');
+ 
+sock.bindSync('tcp://127.0.0.1:3000');
+console.log('Producer bound to port 3000');
+ 
+setInterval(function(){
+  console.log('sending work');
+  sock.send('some work');
+}, 500);
+
+// worker.js 
+var zmq = require('zmq')
+  , sock = zmq.socket('pull');
+ 
+sock.connect('tcp://127.0.0.1:3000');
+console.log('Worker connected to port 3000');
+ 
+sock.on('message', function(msg){
+  console.log('work: %s', msg.toString());
+});
+```
+
+
+
+Pub/Sub:
+
+```javascript
+// pubber.js 
+var zmq = require('zmq')
+  , sock = zmq.socket('pub');
+ 
+sock.bindSync('tcp://127.0.0.1:3000');
+console.log('Publisher bound to port 3000');
+ 
+setInterval(function(){
+  console.log('sending a multipart message envelope');
+  sock.send(['kitty cats', 'meow!']);
+}, 500);
+
+// subber.js 
+var zmq = require('zmq')
+  , sock = zmq.socket('sub');
+ 
+sock.connect('tcp://127.0.0.1:3000');
+sock.subscribe('kitty cats');
+console.log('Subscriber connected to port 3000');
+ 
+sock.on('message', function(topic, message) {
+  console.log('received a message related to:', topic, 'containing message:', message);
+});
+```
+
+
+
+#### srv.js
+
+与DNS，域名解析相关。
+
+
+
+
+
+
+
+
 
 ### lib/wire
 
