@@ -14,11 +14,11 @@ docker pull nginx:latest
 
 ```
 #先启动一个数据库
-docker run -d --name rethinkdb -v /srv/rethinkdb:/data --net host rethinkdb rethinkdb --bind all --cache-size 8192 --http-port 8090
+docker run -d --name test_rethinkdb -v /srv/rethinkdb:/data --net host rethinkdb rethinkdb --bind all --cache-size 8192 --http-port 8090
 #再启动adb service
-docker run -d --name adbd --privileged -v /dev/bus/usb:/dev/bus/usb --net host sorccu/adb:latest
+docker run -d --name test_adbd --privileged -v /dev/bus/usb:/dev/bus/usb --net host sorccu/adb:latest
 #再启动stf
-docker run -d --name stf --net host openstf/stf stf local --public-ip your-ip
+docker run -d --name test_stf --net host openstf/stf stf local --public-ip localhost
 ```
 # 2、把不同的进程运行在不同的Docker上，然后通过nginx配置web服务。
 
@@ -212,6 +212,8 @@ sudo docker run -d --name provider1 --net host openstf/stf stf provider --name "
 - 修改linux的hosts文件绑定stf.test到127.0.0.1，修改后可能需要手动生效
 - 目前adbd做的是systemd启动，不知道是否有问题
 - 目前手机连接有问题，正在解决。
+- 使用第一种方式部署，手机可以正常使用
+- 使用第二种方式部署，手机连接有显示不能使用，会断开连接。
 
 ## 只要加上域名和授权控制，就可以正常使用了
 
