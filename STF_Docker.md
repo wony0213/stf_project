@@ -58,6 +58,10 @@ http {
   upstream stf_websocket {
     server 10.0.5.47:3600 max_fails=0;
   }
+  
+  upstream stf_api {
+    server 192.168.255.100:3700 max_fails=0;
+  }
 
   types {
     application/javascript  js;
@@ -93,6 +97,10 @@ http {
 
     location /auth/ {
       proxy_pass http://stf_auth/auth/;
+    }
+    
+    location /api/ {
+      proxy_pass http://stf_api/api/;
     }
 
     location /s/image/ {
@@ -220,3 +228,25 @@ sudo docker run -d --name provider1 --net host openstf/stf stf provider --name "
 # 3、参考
 
 - https://testerhome.com/topics/5206
+
+# 4、补充
+
+- 可能还需要启动api，stf2.0中api为单独的模块，需要单独启动并且在nginx里面配置
+
+- nginx配置添加
+
+```
+  upstream stf_api {
+    server 192.168.255.100:3700 max_fails=0;
+  }
+  
+  location /api/ {
+    proxy_pass http://stf_api/api/;
+  }
+```
+
+- 单独启动api unit，命令如下
+
+```
+docker run -d --name stf-api-3700 --link rethinkdb-proxy-28015:rethinkdb -e "SECRET=YOUR_SESSION_SECRET_HERE" -p 3700:3000 openstf/stf stf api --port 3000 --connect-sub tcp://10.0.5.47:7150 --connect-push tcp://10.0.5.47:7170
+```
